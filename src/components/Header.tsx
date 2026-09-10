@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
   { name: "Home", href: "/" },
-  { name: "About", href: "/about-us" },
+  { name: "About", href: "/about-us", dropdown: [{ name: "Architects", href: "/about-us/architects" }] },
   { name: "Construction", href: "/#creations" },
   { name: "Realty", href: "/#realty" },
   { name: "News & Updates", href: "/#news" },
@@ -52,19 +52,40 @@ export default function Header() {
         {/* Desktop Nav Links */}
         <div className="hidden md:flex items-center space-x-8">
           {navLinks.map((link) => {
-            const isActive = link.name === "Contact" && pathname === "/contact";
+            const isActive = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href.split('#')[0]);
             return (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={`text-xs font-semibold tracking-widest uppercase relative py-2 px-4 transition-colors ${
-                  isActive 
-                    ? "bg-[#70503f] text-white hover:bg-[#52382c]" 
-                    : "text-[#70503f] hover:text-[#52382c]"
-                }`}
-              >
-                {link.name}
-              </Link>
+              <div key={link.name} className="relative group">
+                <Link
+                  href={link.href}
+                  className={`text-xs font-semibold tracking-widest uppercase relative py-2 px-4 transition-colors flex items-center ${
+                    isActive 
+                      ? "bg-[#70503f] text-white hover:bg-[#52382c]" 
+                      : "text-[#70503f] hover:text-[#52382c]"
+                  }`}
+                >
+                  {link.name}
+                  {link.dropdown && (
+                    <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  )}
+                </Link>
+                {link.dropdown && (
+                  <div className="absolute left-0 mt-2 w-48 bg-white border border-neutral-100 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                    <div className="py-2">
+                      {link.dropdown.map((dropLink) => (
+                        <Link
+                          key={dropLink.name}
+                          href={dropLink.href}
+                          className="block px-4 py-2 text-xs font-semibold tracking-widest uppercase text-[#70503f] hover:bg-[#fcfbfa] hover:text-[#52382c] transition-colors"
+                        >
+                          {dropLink.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             );
           })}
         </div>
@@ -93,14 +114,29 @@ export default function Header() {
           >
             <div className="flex flex-col space-y-4">
               {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-sm font-semibold text-[#70503f] uppercase tracking-widest py-2 border-b border-neutral-100"
-                >
-                  {link.name}
-                </Link>
+                <div key={link.name}>
+                  <Link
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block text-sm font-semibold text-[#70503f] uppercase tracking-widest py-2 border-b border-neutral-100"
+                  >
+                    {link.name}
+                  </Link>
+                  {link.dropdown && (
+                    <div className="pl-4 mt-2 flex flex-col space-y-2 border-l-2 border-[#70503f] opacity-80">
+                      {link.dropdown.map((dropLink) => (
+                        <Link
+                          key={dropLink.name}
+                          href={dropLink.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="text-xs font-semibold text-[#70503f] uppercase tracking-widest py-2 hover:text-[#52382c]"
+                        >
+                          {dropLink.name}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
           </motion.div>
