@@ -1,33 +1,33 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { ArrowUp } from "lucide-react";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 
-export default function Architects() {
-  const [showTopBtn, setShowTopBtn] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 400) {
-        setShowTopBtn(true);
-      } else {
-        setShowTopBtn(false);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
+async function getArchitects() {
+  try {
+    const url = `${process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'}/api/architects?sort=DisplayOrder:asc&filters[Active][$eq]=true`;
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${process.env.STRAPI_API_TOKEN}`,
+      },
+      next: { revalidate: 10 },
     });
-  };
+    if (!res.ok) {
+      console.error("Failed to fetch architects");
+      return null;
+    }
+    const data = await res.json();
+    return data.data;
+  } catch (error) {
+    console.error("Error fetching architects from Strapi:", error);
+    return null;
+  }
+}
 
-  const architectsList = [
+export default async function Architects() {
+  const architects = await getArchitects();
+  
+  // Graceful fallback if Strapi is down
+  const fallbackArchitects = [
     "Arch. Anil Sule & Associates",
     "Architects Cidco Department",
     "Arch. Hafeez Contractor",
@@ -43,6 +43,10 @@ export default function Architects() {
     "Sandeep Shirke & Associates",
     "Design Group India"
   ];
+
+  const displayArchitects = architects && architects.length > 0
+    ? architects.map((a: any) => a.Name)
+    : fallbackArchitects;
 
   return (
     <main className="min-h-screen bg-[#fafaf9] text-neutral-900 font-sans selection:bg-amber-500 selection:text-neutral-950">
@@ -81,7 +85,7 @@ export default function Architects() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative pl-8 md:pl-12 border-l border-[#5c3a21] ml-4 md:ml-8 py-2">
             <ul className="space-y-4 md:space-y-5 list-none">
-              {architectsList.map((architect, idx) => (
+              {displayArchitects.map((architect: string, idx: number) => (
                 <li key={idx} className="relative text-base md:text-lg font-bold text-[#6a5e55]">
                   <span className="absolute -left-6 md:-left-8 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-[#5c3a21]"></span>
                   {architect}
@@ -94,16 +98,7 @@ export default function Architects() {
 
       <Footer />
 
-      {/* Floating Back to Top Button */}
-      <button
-        onClick={scrollToTop}
-        className={`fixed bottom-8 right-8 p-3 rounded-full bg-[#5c3a21] text-white shadow-lg transition-all duration-300 z-50 hover:bg-[#4a2e1b] ${
-          showTopBtn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none"
-        }`}
-        aria-label="Back to top"
-      >
-        <ArrowUp className="w-6 h-6" />
-      </button>
+      <ScrollToTopButton />
     </main>
   );
 }

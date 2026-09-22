@@ -31,8 +31,18 @@ function Counter({ from, to, suffix, label }: { from: number; to: number; suffix
   );
 }
 
-export default function ExperienceSection() {
+export default function ExperienceSection({ strapiData }: { strapiData?: any }) {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
+
+  const displayStats = strapiData?.Stats || [
+    { from: 0, to: 40, suffix: "+", label: "Years of experience" },
+    { from: 0, to: 50, suffix: "+", label: "Projects Completed" },
+    { from: 0, to: 100, suffix: "L+", label: "Square Feet covered" },
+    { from: 0, to: 90, suffix: "%", label: "Positive Feedbacks" }
+  ];
+
+  const displayVisionTitle = strapiData?.VisionTitle || "Our Vision in Motion";
+  const displayVisionDesc = strapiData?.VisionDescription || "How Imagination Takes Flight, and Excellence Blossoms";
 
   return (
     <section id="experience" className="py-20 bg-[#fcfbfa]">
@@ -40,10 +50,9 @@ export default function ExperienceSection() {
         
         {/* Stats Section */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-32 border-y border-neutral-200 py-12">
-          <Counter from={0} to={40} suffix="+" label="Years of experience" />
-          <Counter from={0} to={50} suffix="+" label="Projects Completed" />
-          <Counter from={0} to={100} suffix="L+" label="Square Feet covered" />
-          <Counter from={0} to={90} suffix="%" label="Positive Feedbacks" />
+          {displayStats.map((stat: any, idx: number) => (
+            <Counter key={idx} from={stat.from} to={stat.to} suffix={stat.suffix} label={stat.label} />
+          ))}
         </div>
 
         {/* Vision in Motion Heading */}
@@ -61,10 +70,10 @@ export default function ExperienceSection() {
             className="relative z-10"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-[#70503f] mb-4 tracking-tight">
-              Our Vision in Motion
+              {displayVisionTitle}
             </h2>
             <p className="text-neutral-600 font-medium">
-              How Imagination Takes Flight, and Excellence Blossoms
+              {displayVisionDesc}
             </p>
           </motion.div>
         </div>

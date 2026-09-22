@@ -35,7 +35,11 @@ const itemVariants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
 };
 
-export default function AboutSection() {
+export default function AboutSection({ strapiData }: { strapiData?: any }) {
+  const displayTitle = strapiData?.AboutTitle || "Construction";
+  const displayDesc = strapiData?.AboutDescription || "Our pioneering spirit is driven by cutting-edge infrastructure, state-of-the-art equipment, and a highly skilled team, shaping iconic structures that stand the test of time.";
+  const displayFeatures = strapiData?.Features?.length > 0 ? strapiData.Features : features;
+
   return (
     <section id="about" className="py-20 bg-[#fcfbfa] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -45,7 +49,7 @@ export default function AboutSection() {
           {/* Faint Background Text */}
           <div className="absolute top-0 left-0 w-full text-center pointer-events-none opacity-5 overflow-hidden">
             <span className="text-[120px] md:text-[180px] font-black text-[#70503f] tracking-tighter whitespace-nowrap leading-none select-none">
-              Construction
+              {displayTitle}
             </span>
           </div>
 
@@ -57,10 +61,10 @@ export default function AboutSection() {
             className="relative z-10 max-w-3xl"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-[#70503f] mb-6 tracking-tight">
-              Construction
+              {displayTitle}
             </h2>
             <p className="text-neutral-600 text-lg leading-relaxed font-medium">
-              Our pioneering spirit is driven by cutting-edge infrastructure, state-of-the-art equipment, and a highly skilled team, shaping iconic structures that stand the test of time.
+              {displayDesc}
             </p>
           </motion.div>
         </div>
@@ -109,7 +113,7 @@ export default function AboutSection() {
             viewport={{ once: true }}
             className="w-full md:w-7/12 py-12 px-8 md:px-16 lg:px-24 flex flex-col justify-center space-y-8"
           >
-            {features.map((feature, idx) => (
+            {displayFeatures.map((feature: any, idx: number) => (
               <motion.div key={idx} variants={itemVariants} className="flex flex-col sm:flex-row sm:items-start space-y-2 sm:space-y-0 sm:space-x-6 group">
                 <span className="text-4xl md:text-5xl font-black text-white/20 group-hover:text-white/40 transition-colors shrink-0">
                   {feature.num}

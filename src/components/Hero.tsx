@@ -13,32 +13,12 @@ const slides = [
   {
     id: 1,
     title: "Building Landmark\nLegacies",
-    image: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?q=80&w=2070&auto=format&fit=crop",
-    stripImages: [
-      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=2070&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=2070&auto=format&fit=crop"
-    ]
+    video: "/videos/hero-slide-1.mp4"
   },
   {
     id: 2,
     title: "Crafting Timeless\nArchitecture",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop",
-    stripImages: [
-      "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?q=80&w=2070&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1545558014-8692077e9b5c?q=80&w=2070&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop"
-    ]
-  },
-  {
-    id: 3,
-    title: "Pioneering Luxury\nResidences",
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop",
-    stripImages: [
-      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=2070&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?q=80&w=2070&auto=format&fit=crop"
-    ]
+    video: "/videos/hero-slide-2.mp4"
   }
 ];
 
@@ -76,11 +56,14 @@ export default function Hero() {
                 </div>
               </div>
 
-              {/* Right Side: Main Image */}
+              {/* Right Side: Main Video */}
               <div className="w-full md:w-7/12 h-full relative">
-                <img
-                  src={slide.image}
-                  alt="Building"
+                <video
+                  src={slide.video}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
                   className="w-full h-full object-cover"
                 />
                 
@@ -94,16 +77,6 @@ export default function Hero() {
                   </button>
                 </div>
               </div>
-            </div>
-
-            {/* Lower Image Strip */}
-            <div className="absolute bottom-0 left-0 w-full h-32 md:h-40 flex z-10">
-              {slide.stripImages.map((src, idx) => (
-                <div key={idx} className="flex-1 h-full relative overflow-hidden">
-                  <img src={src} alt="Strip thumbnail" className="w-full h-full object-cover border-r border-white/20" />
-                  <div className="absolute inset-0 bg-black/30 hover:bg-transparent transition-colors duration-300"></div>
-                </div>
-              ))}
             </div>
           </SwiperSlide>
         ))}

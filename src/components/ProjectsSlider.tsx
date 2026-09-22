@@ -48,7 +48,15 @@ const projects = [
   }
 ];
 
-export default function ProjectsSlider() {
+export default function ProjectsSlider({ strapiData }: { strapiData?: any }) {
+  const displayProjects = strapiData?.length > 0 ? strapiData.map((proj: any, idx: number) => ({
+    id: proj.id || idx,
+    title: proj.Title || "PROJECT",
+    mainImage: proj.MainImage?.url || projects[idx % projects.length].mainImage,
+    smallImages: proj.SmallImages?.map((img: any) => img.url) || projects[idx % projects.length].smallImages,
+    features: proj.Features || projects[idx % projects.length].features
+  })) : projects;
+
   return (
     <section id="creations" className="py-20 bg-[#fcfbfa] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -101,7 +109,7 @@ export default function ProjectsSlider() {
             loop={true}
             className="w-full"
           >
-            {projects.map((project) => (
+            {displayProjects.map((project: any) => (
               <SwiperSlide key={project.id}>
                 <div className="flex flex-col lg:flex-row gap-8 items-stretch">
                   
@@ -121,7 +129,7 @@ export default function ProjectsSlider() {
 
                   {/* Center Small Images */}
                   <div className="w-full lg:w-3/12 flex flex-col gap-4 justify-between h-[500px]">
-                    {project.smallImages.map((src, idx) => (
+                    {project.smallImages.map((src: string, idx: number) => (
                       <div key={idx} className="flex-1 rounded-[1.5rem] overflow-hidden shadow-md relative group">
                         <img 
                           src={src} 
@@ -142,7 +150,7 @@ export default function ProjectsSlider() {
                     </p>
 
                     <div className="grid grid-cols-2 gap-y-6 gap-x-4 mb-12">
-                      {project.features.map((feat, idx) => (
+                      {project.features.map((feat: any, idx: number) => (
                         <div key={idx} className="flex items-center space-x-3 text-neutral-600">
                           <feat.icon className="w-5 h-5 text-[#70503f] shrink-0" />
                           <span className="text-xs font-semibold tracking-wide">{feat.text}</span>
