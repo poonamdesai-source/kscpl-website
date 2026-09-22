@@ -80,28 +80,10 @@ export default function AboutSection({ strapiData }: { strapiData?: any }) {
             transition={{ duration: 0.8 }}
             className="w-full md:w-5/12 relative h-80 md:h-auto"
           >
-            {/* The screenshot shows the image offset to the left and overlapping slightly */}
-            <div className="absolute top-1/2 -translate-y-1/2 left-[-2rem] w-[110%] h-[110%] md:h-[120%] z-10 shadow-xl hidden md:block">
-               <img 
-                 src="https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?q=80&w=2070&auto=format&fit=crop" 
-                 alt="Construction Site" 
-                 className="w-full h-full object-cover"
-               />
-               {/* Small overlay image on bottom left of the main image */}
-               <div className="absolute -bottom-4 left-4 w-48 h-32 border-4 border-white shadow-lg">
-                 <img 
-                   src="https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?q=80&w=2070&auto=format&fit=crop" 
-                   alt="Site View" 
-                   className="w-full h-full object-cover"
-                 />
-               </div>
-            </div>
-            
-            {/* Mobile fallback image */}
             <img 
-              src="https://images.unsplash.com/photo-1541888946425-d0fbb186a5b3?q=80&w=2070&auto=format&fit=crop" 
-              alt="Construction Site" 
-              className="w-full h-full object-cover block md:hidden"
+              src="/images/glass-construction-building.jpg" 
+              alt="Modern glass construction building" 
+              className="w-full h-full object-cover block absolute inset-0"
             />
           </motion.div>
 
